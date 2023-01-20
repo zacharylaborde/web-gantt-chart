@@ -1,0 +1,252 @@
+:root {
+    --primary: #00308F;
+    --primary-light: #00509F;
+
+    --error-dark: #5D1009;
+    --error: #EE5244;
+    --error-light: #F7AAA1;
+
+    --tan-dark: #724B09;
+    --tan: #F9DDAD;
+    --tan-light: #FEF7EC;
+
+    --warn-dark: #796B01;
+    --warn: #F5D800;
+    --warn-light: #FFF399;
+
+    --good-dark: #183A22;
+    --good: #61BD7C;
+    --good-light: #92DDAE;
+
+    --mint-dark: #0A4838;
+    --mint: #52E385;
+    --mint-light: #DBFAF2;
+
+    --support-dark: #0D4A6D;
+    --support: #1B98E0;
+    --support-light: #B6DFF6;
+
+    --deep-dark: #0C1931;
+    --deep: #27509F;
+    --deep-light: #3A6ECF;
+
+    --violet-dark: #1E064B;
+    --violet: #9968F3;
+    --violet-light: #CBB3F9;
+
+    --maroon-dark: #450D1E;
+    --maroon: #AE204B;
+    --maroon-light: #E887A4;
+
+    --smoke-dark: #3D3D3D;
+    --smoke: darkgrey;
+    --smoke-light: lightgrey;
+}
+
+.good {
+    color: var(--good-dark);
+    background-color: var(--good-light);
+}
+.good-border {
+    border: 4px solid var(--good);
+}
+.good:hover {
+    background-color: var(--good);
+}
+.good:focus {
+    border: 4px solid black;
+    box-shadow: 0 0 10px 1px black;
+    background-color: var(--good);
+    color: black;
+    font-weight: bold;
+    letter-spacing: 0.1rem;
+}
+
+.warn {
+    color: var(--warn-dark);
+    background-color: var(--warn-light);
+}
+.warn-border {
+    border: 4px solid var(--warn);
+}
+.warn:hover {
+    background-color: var(--warn);
+}
+.warn:focus {
+    border: 4px solid black;
+    box-shadow: 0 0 10px 1px black;
+    background-color: var(--warn);
+    color: black;
+    font-weight: bold;
+    letter-spacing: 0.1rem;
+}
+
+.support {
+    color: var(--support-dark);
+    background-color: var(--support-light);
+}
+.support-border {
+    border: 4px solid var(--support);
+}
+.support:hover {
+    background-color: var(--support);
+}
+.support:focus {
+    border: 4px solid black;
+    box-shadow: 0 0 10px 1px black;
+    background-color: var(--support);
+    color: black;
+    font-weight: bold;
+    letter-spacing: 0.1rem;
+}
+
+.deep {
+    color: var(--deep-dark);
+    background-color: var(--deep-light);
+}
+.deep-border {
+    border: 4px solid var(--deep);
+}
+.deep:hover {
+    background-color: var(--deep);
+}
+.deep:focus-within {
+    border: 4px solid black;
+    box-shadow: 0 0 10px 1px black;
+    background-color: var(--deep);
+    color: black;
+    font-weight: bold;
+    letter-spacing: 0.1rem;
+}
+
+.error {
+    color: var(--error-dark);
+    background-color: var(--error-light);
+}
+.error-border {
+    border: 4px solid var(--error);
+}
+.error:hover {
+    background-color: var(--error);
+}
+.error:focus {
+    border: 4px solid black;
+    box-shadow: 0 0 10px 1px black;
+    background-color: var(--error);
+    color: black;
+    font-weight: bold;
+    letter-spacing: 0.1rem;
+}
+
+.smoke {
+    color: var(--smoke-dark);
+    background-color: var(--smoke-light);
+}
+.smoke-border {
+    border: 4px solid var(--smoke);
+}
+.smoke:hover {
+    background-color: var(--smoke);
+}
+.smoke:focus {
+    border: 4px solid black;
+    box-shadow: 0 0 10px 1px black;
+    background-color: var(--smoke);
+    color: black;
+}
+
+.tan {
+    color: var(--tan-dark);
+    background-color: var(--tan-light);
+}
+.tan-border {
+    border: 4px solid var(--tan);
+}
+.tan:hover {
+    background-color: var(--tan);
+}
+.tan:focus {
+    border: 4px solid black;
+    box-shadow: 0 0 10px 1px black;
+    background-color: var(--tan);
+    color: black;
+    font-weight: bold;
+    letter-spacing: 0.1rem;
+}
+
+.mint {
+    color: var(--mint-dark);
+    background-color: var(--mint-light);
+}
+.mint-border {
+    border: 4px solid var(--mint);
+}
+.mint:hover {
+    background-color: var(--mint);
+}
+.mint:focus {
+    border: 4px solid black;
+    box-shadow: 0 0 10px 1px black;
+    background-color: var(--mint);
+    color: black;
+    font-weight: bold;
+    letter-spacing: 0.1rem;
+}
+
+.violet {
+    color: var(--violet-dark);
+    background-color: var(--violet-light);
+}
+.violet-border {
+    border: 4px solid var(--violet);
+}
+.violet:hover {
+    background-color: var(--violet);
+}
+.violet:focus {
+    border: 4px solid black;
+    box-shadow: 0 0 10px 1px black;
+    background-color: var(--violet);
+    color: black;
+    font-weight: bold;
+    letter-spacing: 0.1rem;
+}
+
+.maroon {
+    color: var(--maroon-dark);
+    background-color: var(--maroon-light);      /* Standard */
+    z-index: 2;
+}
+.maroon-border {
+    border: 4px solid var(--maroon);
+}
+.maroon:hover {
+    background-color: var(--maroon);
+}
+.maroon:focus {
+    border: 4px solid black;
+    box-shadow: 0 0 10px 1px black;
+    background-color: var(--maroon);
+    color: black;
+    font-weight: bold;
+    letter-spacing: 0.1rem;
+}
+
+.primary {
+    background-color: var(--primary);
+    color: white;
+}
+
+.primary-light {
+    background-color: var(--primary-light);
+    color: white;
+}
+
+.jet-black {
+    background-color: #121417;
+    color: white;
+}
+
+.over {
+    background-color: pink;
+}
