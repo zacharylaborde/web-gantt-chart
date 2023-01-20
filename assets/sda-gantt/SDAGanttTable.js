@@ -16,19 +16,21 @@ class SDAGanttTable extends HTMLTableElement {
     }
 
     connectedCallback() {
-        this.socket.on("update", (data) => {
-            this.updateEvent(data);
-        });
-        this.socket.on("delete", (data) => {
-            this.deleteEvent(data);
+        fetch("/sda-gantt/get-sections",{
+            credentials: "include"
         })
-        fetch("/sda-gantt/get-sections")
             .then((response) => response.json())
             .then((data) => {
                 data.sections.forEach((sectionTitle) =>{
                     this.addSection(sectionTitle);
                 });
         });
+        this.socket.on("update", (data) => {
+            this.updateEvent(data);
+        });
+        this.socket.on("delete", (data) => {
+            this.deleteEvent(data);
+        })
         this.getEventsFromServer()
     }
 

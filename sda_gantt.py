@@ -1,4 +1,3 @@
-import dash_bootstrap_components as dbc
 import flask
 from flask_socketio import SocketIO
 from dash import html, ClientsideFunction, Input, Output
@@ -11,13 +10,7 @@ class SDAGantt(html.Div):
     def __init__(self, app):
         self.app = app
         self.socketio = SocketIO(app.server)
-        with open("events.json", "r") as jsonFile:
-            data = json.load(jsonFile)
-        super().__init__([
-            html.Div(json.dumps(data), id="gantt-init", style={'display': 'none'}),
-            html.Div(children=[], id='sda-gantt-display')
-        ],
-        )
+        super().__init__(id='sda-gantt-display')
         self.app.clientside_callback(
             clientside_function=ClientsideFunction(
                 namespace='gantt',
@@ -41,7 +34,6 @@ class SDAGantt(html.Div):
 
             with open("events.json", "w") as jsonFile:
                 json.dump(json_file, jsonFile)
-            self.render()
             self.socketio.emit('update', res)
 
         @self.socketio.on('create')
@@ -61,7 +53,6 @@ class SDAGantt(html.Div):
 
             with open("events.json", "w") as jsonFile:
                 json.dump(json_file, jsonFile)
-            self.render()
             self.socketio.emit('update', req)
 
         @self.socketio.on('delete')
@@ -76,7 +67,6 @@ class SDAGantt(html.Div):
 
             with open("events.json", "w") as jsonFile:
                 json.dump(json_file, jsonFile)
-            self.render()
             self.socketio.emit('delete', req)
 
         @app.server.route("/sda-event-categories/<id>")
@@ -121,18 +111,3 @@ class SDAGantt(html.Div):
             with open("events.json", "r") as jsonFile:
                 res = json.load(jsonFile)
             return flask.jsonify(res)
-
-
-    def render(self):
-        """Renders the Gantt Chart."""
-        with open("events.json", "r") as jsonFile:
-            data = json.load(jsonFile)
-        super().__init__([
-            html.Div(json.dumps(data), id="gantt-init", style={'display': 'none'}),
-            dbc.Input(
-                id='UpdateGanttEvent',
-                type='text',
-                style={'display': 'none'}
-            )],
-            id='sda-gantt-display',
-        )

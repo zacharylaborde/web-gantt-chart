@@ -21,23 +21,23 @@ class SDAGanttCell extends HTMLTableCellElement {
     }
 
     createEvent(event) {
-        this.firstChild.createEvent(event);
+        this.querySelector("sda-gantt-event-list").createEvent(event);
     }
 
     appendEvent(event) {
-        this.firstChild.appendEvent(event);
+        this.querySelector("sda-gantt-event-list").appendEvent(event);
     }
 
     addEvent(event) {
-        this.firstChild.addEvent(event);
+        this.querySelector("sda-gantt-event-list").addEvent(event);
     }
 
     removeEvent(event) {
-        this.firstChild.del(event);
+        this.querySelector("sda-gantt-event-list").del(event);
     }
 
     moveEvent(event) {
-        this.firstChild.moveEvent(event);
+        this.querySelector("sda-gantt-event-list").moveEvent(event);
     }
 
     parentRowCells(modify) {
@@ -55,7 +55,7 @@ class SDAGanttCell extends HTMLTableCellElement {
     }
 
     get events() {
-        return this.firstChild.events;
+        return this.querySelector("sda-gantt-event-list").events;
     }
 
     get parentRowName() {

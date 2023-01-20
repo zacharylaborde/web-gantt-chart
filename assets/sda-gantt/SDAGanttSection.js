@@ -15,8 +15,8 @@ class SDAGanttSection extends HTMLTableSectionElement {
     }
 
     connectedCallback() {
-        this.firstElementChild.firstElementChild.colSpan = this.numDays + 1
-        this.firstElementChild.onclick = () => {
+        this.querySelector(".gantt-titles").colSpan = this.numDays + 1
+        this.querySelector(".gantt-section-head").onclick = () => {
             this.hiddenRow = !this.hiddenRow;
             this.rows.forEach((row) => {
                 if (this.hiddenRow) row.style.display = "none";
