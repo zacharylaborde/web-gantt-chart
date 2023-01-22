@@ -2,10 +2,9 @@ class SDAGanttEvent extends HTMLElement {
     constructor(name, activityCode, id, options={}) {
         super();
         this.innerHTML = `
-            <div class="flag-holder"></div>
-            <p class="event-text"></p>
-        `
-        this.name = "name";
+        <div class="flag-holder"></div>
+        <p class="event-text"></p>`;
+        this.name = name;
         this.activityCode = activityCode;
         Object.keys(options).forEach((key) => this.dataset[key] = options[key])
         this.tabIndex = 0;

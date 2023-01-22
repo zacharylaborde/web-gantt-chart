@@ -50,7 +50,7 @@
 }
 
 .warning:hover {
-    color: var(--warn-light);
+    background-color: var(--warn-light);
 }
 
 .warning-background {

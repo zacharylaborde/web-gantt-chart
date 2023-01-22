@@ -30,6 +30,12 @@ class SDAGanttTable extends HTMLTableElement {
             this.querySelectorAll(`sda-gantt-event`).forEach((event) => {
                 if (event.id === conflict.event_id.toString()) event.addFlag("conflict", conflict.description)
             })
+        });
+        let warnings = await this.gatherWarnings();
+        warnings.forEach((warning) => {
+            this.querySelectorAll(`sda-gantt-event`).forEach((event) => {
+                if (event.id === warning.event_id.toString()) event.addFlag("warning", warning.description)
+            })
         })
     }
 
