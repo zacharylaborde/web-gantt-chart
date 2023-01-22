@@ -3,6 +3,7 @@ class SDAGanttTable extends HTMLTableElement {
         super();
         this.setAttribute('is', 'sda-gantt-table');
         this.innerHTML = `
+        <div class="table-message-box">&nbsp;</div>
         <thead class="gantt-header">
             <tr id="gantt-time" class="gantt-time jet-black">
                 <th class="jet-black gantt-time"></th>
@@ -24,6 +25,32 @@ class SDAGanttTable extends HTMLTableElement {
         events.forEach((event) => {
             this.addEvent(event);
         });
+        let conflicts = await this.gatherConflicts();
+        conflicts.forEach((conflict) => {
+            this.querySelectorAll(`sda-gantt-event`).forEach((event) => {
+                if (event.id === conflict.event_id.toString()) event.addFlag("conflict", conflict.description)
+            })
+        })
+    }
+
+    async gatherConflicts() {
+        return fetch("sda-gantt/get-conflicts-and-warnings", {
+            credentials: "include",
+            method: "UPDATE",
+            body: JSON.stringify({scheduleString: "2023W1S1", startDay: this.startDay, numDays: this.numDays})
+        })
+            .then((response) => response.json())
+            .then((data) => {return data.conflicts;});
+    }
+
+    async gatherWarnings() {
+        return fetch("sda-gantt/get-conflicts-and-warnings", {
+            credentials: "include",
+            method: "UPDATE",
+            body: JSON.stringify({scheduleString: "2023W1S1", startDay: this.startDay, numDays: this.numDays})
+        })
+            .then((response) => response.json())
+            .then((data) => {return data.warnings;});
     }
 
     async gatherSections() {

@@ -1,7 +1,11 @@
 class SDAGanttEvent extends HTMLElement {
     constructor(name, activityCode, id, options={}) {
         super();
-        this.name = name;
+        this.innerHTML = `
+            <div class="flag-holder"></div>
+            <p class="event-text"></p>
+        `
+        this.name = "name";
         this.activityCode = activityCode;
         Object.keys(options).forEach((key) => this.dataset[key] = options[key])
         this.tabIndex = 0;
@@ -30,11 +34,17 @@ class SDAGanttEvent extends HTMLElement {
     }
 
     get parentRowName() {
-        return this.parentNode.parentRowName;
+        return this.parentRow.title;
     }
 
     get parentRow() {
-        return this.parentNode.parentRow;
+        let parentRow;
+        this.getRootNode().querySelectorAll('tr[is=sda-gantt-row]').forEach((row) => {
+                row.querySelectorAll('sda-gantt-event').forEach((event) => {
+                    if (event.id === this.id) parentRow = row;
+                });
+            });
+        return parentRow;
     }
 
     get isSpikeUser() {
@@ -46,11 +56,11 @@ class SDAGanttEvent extends HTMLElement {
     }
 
     set name(name) {
-        this.innerText = name;
+        this.querySelector('.event-text').innerText = name;
     }
 
     get name() {
-        return this.innerText;
+        return this.querySelector('.event-text').innerText;
     }
 
     set activityCode(activityCode) {
@@ -65,6 +75,14 @@ class SDAGanttEvent extends HTMLElement {
     deleteEvent() {
         let req = {event: this.id}
         this.getRootNode().host.socket.emit('delete', req)
+    }
+
+    addFlag(type, description) {
+        this.querySelector(".flag-holder").appendChild(new SDAGanttFlag(type, description));
+    }
+
+    clearFlags() {
+        this.querySelectorAll("sda-gantt-flag").forEach((flag) => flag.remove());
     }
 
     parentRowEvents(modify) {

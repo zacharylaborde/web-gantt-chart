@@ -33,7 +33,6 @@ class SDAGanttRow extends HTMLTableRowElement {
     }
 
     addEvent(event) {
-        console.log(event);
         this.querySelectorAll('td[is=sda-gantt-cell]').forEach((cell) => {
             new Date(cell.dataset.day).toString() === new Date(event.day).toString() ?
                     cell.addEvent(event) : null

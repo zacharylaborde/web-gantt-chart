@@ -1,11 +1,33 @@
 class SDAGanttFlag extends HTMLElement {
-    constructor() {
+    constructor(type, description) {
         super();
-        this.innerHTML = `<div class="gantt-flag">\u2691</div>`;
+        let flagString = "\u2691";
+        this.innerHTML = `<div class="gantt-flag ${type}">${"\u2691"}</div>`;
+        this.querySelector('.gantt-flag').onmouseenter = this._onmouseenter;
+        this.querySelector('.gantt-flag').onmouseleave = this._onmouseleave;
+
+        this.message = this.constructMessage(type, description);
     }
 
     connectedCallback() {
+    }
 
+    constructMessage(type, description) {
+        let message = document.createElement('div');
+        message.innerHTML = `<p class="flag-message ${type}-background">${type}: ${description}</p>`
+        message.className = 'flag-message';
+        return message;
+    }
+
+    _onmouseenter() {
+        this.getRootNode().querySelector('.table-message-box')
+            .appendChild(this.parentNode.message);
+        this.getRootNode().querySelector('.table-message-box').style.visibility = "visible";
+    }
+
+    _onmouseleave() {
+        this.getRootNode().querySelectorAll('.table-message-box')
+            .forEach((messageBox) => {messageBox.removeChild(this.parentNode.message)});
     }
 }
 

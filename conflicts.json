@@ -1,0 +1,31 @@
+{
+  "conflicts": [
+    {
+      "event_id" : 1,
+      "description" : "Too much high pressure air is being used."
+    },
+    {
+      "event_id" : 1,
+      "description" : "Too much high pressure air is being used."
+    },
+    {
+      "event_id" : 1,
+      "description" : "Too much high pressure air is being used."
+    },
+    {
+      "event_id" : 1,
+      "description" : "Too much high pressure air is being used."
+    },
+    {
+      "event_id" : 1,
+      "description" : "Too much high pressure air is being used."
+    }
+  ],
+
+  "warnings": [
+    {
+      "event_id": 2,
+      "description": "It may be too cold on that day."
+    }
+  ]
+}

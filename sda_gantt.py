@@ -111,3 +111,14 @@ class SDAGantt(html.Div):
             with open("events.json", "r") as jsonFile:
                 res = json.load(jsonFile)
             return flask.jsonify(res)
+
+        @app.server.route('/sda-gantt/get-conflicts-and-warnings', methods=["UPDATE"])
+        def get_conflicts():
+            # The following is a simulated server request.
+            req = json.loads(flask.request.data)
+            start_day = req["startDay"]
+            num_days = req["numDays"]
+            schedule_version = req["scheduleString"]
+            with open("conflicts.json", "r") as jsonFile:
+                res = json.load(jsonFile)
+            return flask.jsonify(res)
