@@ -74,10 +74,6 @@ class SDAGanttSection extends HTMLTableSectionElement {
         return rows;
     }
 
-    get socket() {
-        return this.parentNode.socket
-    }
-
     get containsEmptyRow() {
         let containsEmptyRow = false;
         this.rows.forEach((row) => {

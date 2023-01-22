@@ -62,13 +62,9 @@ class SDAGanttEvent extends HTMLElement {
         return this.dataset.activityCode;
     }
 
-    get socket() {
-        return this.parentNode.socket;
-    }
-
     deleteEvent() {
         let req = {event: this.id}
-        this.socket.emit('delete', req)
+        this.getRootNode().host.socket.emit('delete', req)
     }
 
     parentRowEvents(modify) {
@@ -94,20 +90,10 @@ class SDAGanttEvent extends HTMLElement {
     }
 
     _ondragstart(event) {
-        this.parentRowEvents((ganttEvent) => {
-            ganttEvent.style.opacity = '0.2';
-            ganttEvent.style.zIndex = '-1';
-        })
         this.style.opacity = '0.4';
         event.dataTransfer.setData("text", this.id);
         if (event.shiftKey) event.dataTransfer.effectAllowed = 'copy';
         else event.dataTransfer.effectAllowed = 'move';
-    }
-
-    _ondragend() {
-        this.parentRowEvents((ganttEvent) => {
-            ganttEvent.removeAttribute("style");
-        });
     }
 
     _onkeydown(event) {

@@ -1,7 +1,6 @@
 .gantt-event {
     text-transform: uppercase;
     padding: 2px;
-    width: 100%;
     min-height: 35px;
     height: 100%;
     text-align: center;
@@ -43,7 +42,8 @@ sda-gantt-event-list {
     height: 100%;
     display: flex;
     flex-direction: column;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: clip;
 }
 
 sda-gantt-event-list::-moz-viewport-scroll {
@@ -59,14 +59,14 @@ sda-gantt-event-list::-webkit-scrollbar {
     border: solid 1px #ADC9FF;
     border-top: solid 1px black;
     border-bottom: solid 1px black;
-    overflow: clip;
+    overflow: hidden;
     max-width: 100px;
 }
 
 .add-event-filter {
     background-color: var(--mint-light);
     color: var(--mint-dark);
-    font-size: 12px;
+    font-size: 10px;
     font-weight: bold;
     position: absolute;
     top: 0;
@@ -95,7 +95,7 @@ sda-gantt-event-list::-webkit-scrollbar {
 .new-row-mirage {
     background-color: var(--mint-light);
     color: var(--mint-dark);
-    font-size: 20px;
+    font-size: 12px;
     width: 100%;
     height: 20px;
     user-select: none;

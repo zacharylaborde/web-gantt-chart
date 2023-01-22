@@ -1,6 +1,7 @@
 class SDAGanttEditorPanel extends HTMLElement {
     constructor() {
         super();
+        this.innerHTML = ""
     }
 
 

@@ -12,42 +12,38 @@ class SDAGanttTable extends HTMLTableElement {
         this.startDay = new Date(startDay).toString();
         this.numDays = numDays;
         this.addDays(numDays);
-        this.socket = io.connect()
+        this.className = 'gantt-table';
     }
 
-    connectedCallback() {
-        fetch("/sda-gantt/get-sections",{
+    async connectedCallback() {
+        let sections = await this.gatherSections()
+        sections.forEach((sectionTitle) =>{
+            this.addSection(sectionTitle);
+        });
+        let events = await this.gatherEvents();
+        events.forEach((event) => {
+            this.addEvent(event);
+        });
+    }
+
+    async gatherSections() {
+        return fetch("/sda-gantt/get-sections",{
             credentials: "include"
         })
             .then((response) => response.json())
-            .then((data) => {
-                data.sections.forEach((sectionTitle) =>{
-                    this.addSection(sectionTitle);
-                });
-        });
-        this.socket.on("update", (data) => {
-            this.updateEvent(data);
-        });
-        this.socket.on("delete", (data) => {
-            this.deleteEvent(data);
-        })
-        this.getEventsFromServer()
+            .then((data) => {return data.sections});
     }
 
-    getEventsFromServer() {
-        fetch("/sda-gantt/get-events", {
+    async gatherEvents() {
+        return fetch("/sda-gantt/get-events", {
             method: 'UPDATE',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({startDay: this.startDay, numDays: this.numDays})
+            body: JSON.stringify({scheduleString: "2023W1S1", startDay: this.startDay, numDays: this.numDays})
         })
             .then((response) => response.json())
-            .then((data) => {
-                data.events.forEach((event) => {
-                    this.addEvent(event);
-            });
-        });
+            .then((data) => {return data.events;});
     }
 
     addDays(numDays) {
@@ -65,7 +61,8 @@ class SDAGanttTable extends HTMLTableElement {
 
     addRow(title, sectionTitle) {
         let shouldCreateNewSection = true;
-        this.sections.forEach((section) => {
+        let sections = this.querySelectorAll("tbody[is=sda-gantt-section]");
+        sections.forEach((section) => {
             if (section.title === sectionTitle) {
                 section.addRow(title);
                 shouldCreateNewSection = false;
@@ -73,7 +70,7 @@ class SDAGanttTable extends HTMLTableElement {
         });
         if (shouldCreateNewSection) {
             this.addSection(sectionTitle);
-            this.sections.forEach((section) => {
+            sections.forEach((section) => {
                 if (section.title === sectionTitle) section.addRow(title);
             })
         }
@@ -81,38 +78,20 @@ class SDAGanttTable extends HTMLTableElement {
 
     addEvent(event) {
         let shouldCreateNewRow = true;
-        if (this.rows)
-            this.rows.forEach((row) => {
+        let rows = this.querySelectorAll("tr[is=sda-gantt-row]");
+        if (rows.length !== 0)
+            rows.forEach((row) => {
                 if (row.title === event.parentRowName) {
                     row.addEvent(event);
                     shouldCreateNewRow = false;
                 }
-            });
+        });
         if (shouldCreateNewRow) {
             this.addRow(event.parentRowName, event.type);
-            this.rows.forEach((row) => {
+            this.querySelectorAll("tr[is=sda-gantt-row]").forEach((row) => {
                 if (row.title === event.parentRowName) row.addEvent(event);
             });
         }
-    }
-
-    updateEvent(event) {
-        let shouldAddEvent = true;
-        this.events.forEach((currentEvent) => {
-            if (event.id.toString() === currentEvent.id.toString()) {
-                currentEvent.updateTo(event);
-                shouldAddEvent = false;
-            }
-        });
-        if (shouldAddEvent) this.addEvent(event);
-    }
-
-    deleteEvent(id) {
-        this.events.forEach((currentEvent) => {
-            if (id.event.toString() === currentEvent.id.toString()) {
-                currentEvent.remove();
-            }
-        });
     }
 
     createDay() {
@@ -136,37 +115,6 @@ class SDAGanttTable extends HTMLTableElement {
 
     set numDays(numDays) {
         this.dataset.numDays = numDays;
-    }
-
-    get sections() {
-        let sections = [];
-        this.childNodes.forEach((child) => {
-            if (child instanceof SDAGanttSection) sections.push(child);
-        });
-        return sections;
-    }
-
-    get rows() {
-        let rows = [];
-        this.sections.forEach((section) => {
-            if (section.rows) {
-                section.rows.forEach((row) => {
-                    rows.push(row);
-                });
-            }
-        });
-        return rows;
-    }
-
-    get events() {
-        let events = []
-        this.rows.forEach((row) => {
-            if (row instanceof SDAGanttRow)
-                row.events.forEach((event) => {
-                    events.push(event);
-                });
-        });
-        return events;
     }
 }
 

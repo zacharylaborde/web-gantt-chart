@@ -4,6 +4,8 @@ class SDAGanttRow extends HTMLTableRowElement {
         this.setAttribute('is', 'sda-gantt-row');
         this.innerHTML = `<td class="gantt-head primary-light"></td>`
         this.title = title;
+        this.ondragstart = this._ondragstart;
+        this.ondragend = this._ondragend;
     }
 
     connectedCallback() {
@@ -31,10 +33,22 @@ class SDAGanttRow extends HTMLTableRowElement {
     }
 
     addEvent(event) {
-        this.positions.forEach((position) =>
-            new Date(position.dataset.day).toString() === new Date(event.day).toString() ?
-                position.addEvent(event) : null
+        console.log(event);
+        this.querySelectorAll('td[is=sda-gantt-cell]').forEach((cell) => {
+            new Date(cell.dataset.day).toString() === new Date(event.day).toString() ?
+                    cell.addEvent(event) : null
+            }
         );
+    }
+
+    _ondragstart() {
+        this.querySelectorAll('sda-gantt-event')
+            .forEach((cell) => cell.style.opacity = '0.3');
+    }
+
+    _ondragend(){
+        this.querySelectorAll('sda-gantt-event')
+            .forEach((cell) => cell.removeAttribute('style'));
     }
 
     get events() {
@@ -74,10 +88,6 @@ class SDAGanttRow extends HTMLTableRowElement {
             if (child instanceof SDAGanttCell) positions.push(child);
         });
         return positions;
-    }
-
-    get socket() {
-        return this.parentNode.socket
     }
 
     get type() {

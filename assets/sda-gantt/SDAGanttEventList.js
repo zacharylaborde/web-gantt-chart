@@ -1,6 +1,7 @@
 class SDAGanttEventList extends HTMLElement {
     constructor() {
         super();
+        this.ondrop = this._ondrop;
     }
 
     addEvent({name, activityCode, id, options}) {
@@ -15,11 +16,7 @@ class SDAGanttEventList extends HTMLElement {
     moveEvent(event) {
         event.classList.add("loading-event");
         let req = {event: event.id, property: "day", to: this.day};
-        this.socket.emit('update', req);
-    }
-
-    get parentRow() {
-        return this.parentNode.parentRow;
+        this.getRootNode().host.socket.emit('update', req);
     }
 
     createEvent(event) {
@@ -31,7 +28,7 @@ class SDAGanttEventList extends HTMLElement {
             type: this.type,
             options: event.options,
         }
-        this.socket.emit('create', req)
+        this.getRootNode().host.socket.emit('create', req)
     }
 
     appendEvent(event) {
@@ -50,10 +47,6 @@ class SDAGanttEventList extends HTMLElement {
         })
     }
 
-    get events() {
-        return this.childNodes;
-    }
-
     get day() {
         return this.parentNode.day;
     }
@@ -62,12 +55,20 @@ class SDAGanttEventList extends HTMLElement {
         return this.parentNode.parentRowName;
     }
 
-    get socket() {
-        return this.parentNode.socket;
-    }
-
     get type() {
         return this.parentNode.type;
+    }
+
+    _ondrop(event) {
+        event.preventDefault();
+        const eventId = event.dataTransfer.getData("text");
+        let ganttEvent = this.getRootNode().getElementById(eventId);
+        if (event.dataTransfer.effectAllowed === "copy") this.createEvent({
+            name: ganttEvent.name,
+            activityCode: ganttEvent.activityCode,
+            options: ganttEvent.options
+        });
+        else this.moveEvent(ganttEvent);
     }
 }
 

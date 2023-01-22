@@ -54,16 +54,8 @@ class SDAGanttCell extends HTMLTableCellElement {
         this.dataset.day = day;
     }
 
-    get events() {
-        return this.querySelector("sda-gantt-event-list").events;
-    }
-
     get parentRowName() {
         return this.parentNode.title;
-    }
-
-    get socket() {
-        return this.parentNode.socket;
     }
 
     get type() {
@@ -90,19 +82,7 @@ class SDAGanttCell extends HTMLTableCellElement {
     }
 
     _ondrop(event) {
-        event.preventDefault();
         this.classList.remove("over");
-        const isCopyEvent = event.dataTransfer.effectAllowed === "copy";
-        const eventId = event.dataTransfer.getData("text");
-        let ganttEvent = document.getElementById(eventId); // change 'document' to shadowRoot.
-        if (this.parentRowName === ganttEvent.parentRowName) {
-            if (isCopyEvent) this.createEvent({
-                name: ganttEvent.name,
-                activityCode: ganttEvent.activityCode,
-                options: ganttEvent.options
-            });
-            else this.moveEvent(ganttEvent);
-        }
     }
 
     _onmouseenter(event) {
@@ -110,7 +90,7 @@ class SDAGanttCell extends HTMLTableCellElement {
         addEventDiv.classList.add("add-event-filter");
         addEventDiv.id = "add-event-filter";
         addEventDiv.innerText = "+";
-        if (this.events.length === 0) addEventDiv.style.opacity = "1";
+        if (this.querySelectorAll("sda-gantt-event").length === 0) addEventDiv.style.opacity = "1";
         addEventDiv.onclick = () => {
             this.createEvent({name: "", activityCode: "TEST", options: {}});
         }
