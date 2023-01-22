@@ -4,8 +4,7 @@ class SDAGanttContainer extends HTMLElement {
         this.attachShadow({mode: "open"});
         this.socket = io.connect();
         this.shadowRoot.innerHTML = `
-        <div class="gantt-table-container"></div>
-        <div class="editor-panel"></div>`;
+        <div class="gantt-table-container"></div>`;
         this.className = 'gantt-container';
     }
 
@@ -18,7 +17,7 @@ class SDAGanttContainer extends HTMLElement {
         this.shadowRoot.appendChild(new SDAGanttStyle("conflict-flags.css"));
         this.shadowRoot.querySelector('.gantt-table-container')
             .appendChild(new SDAGanttTable({numDays: 17, startDay: "10JAN2023"}));
-        this.shadowRoot.appendChild(new SDAGanttEditorPanel());
+        this.shadowRoot.appendChild(new SDAGanttButtomEditorPanel());
 
         this.socket.on("update", (data) => {
             let shouldAddEvent = true;

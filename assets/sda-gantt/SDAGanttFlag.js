@@ -21,13 +21,14 @@ class SDAGanttFlag extends HTMLElement {
 
     _onmouseenter() {
         this.getRootNode().querySelector('.table-message-box')
-            .appendChild(this.parentNode.message);
-        this.getRootNode().querySelector('.table-message-box').style.visibility = "visible";
+            .appendChild(this.parentNode.message.cloneNode(true));
     }
 
     _onmouseleave() {
         this.getRootNode().querySelectorAll('.table-message-box')
-            .forEach((messageBox) => {messageBox.removeChild(this.parentNode.message)});
+            .forEach((messageBox) => {messageBox.querySelectorAll('.flag-message').forEach((message)=> {
+                message.remove();
+            })});
     }
 }
 
