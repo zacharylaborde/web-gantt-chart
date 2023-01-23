@@ -1,23 +1,25 @@
-class SDAGanttContainer extends HTMLElement {
+class MainSDAGanttContainer extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({mode: "open"});
         this.socket = io.connect();
         this.shadowRoot.innerHTML = `
-        <div class="gantt-table-container"></div>`;
-        this.className = 'gantt-container';
+        <div class="gantt-table-container">
+            <div class="gantt-table-controller"></div>
+        </div>`;
     }
 
     connectedCallback() {
+        this.shadowRoot.querySelector('.gantt-table-controller')
+            .appendChild(new SDAGanttTableController());
         this.shadowRoot.appendChild(new SDAGanttStyle("form-fields.css"));
         this.shadowRoot.appendChild(new SDAGanttStyle("gantt-events.css"));
         this.shadowRoot.appendChild(new SDAGanttStyle("gantt-heads.css"));
-        this.shadowRoot.appendChild(new SDAGanttStyle("scroll-bar.css"));
-        this.shadowRoot.appendChild(new SDAGanttStyle("colors.css"));
-        this.shadowRoot.appendChild(new SDAGanttStyle("conflict-flags.css"));
-        this.shadowRoot.querySelector('.gantt-table-container')
-            .appendChild(new SDAGanttTable({numDays: 17, startDay: "10JAN2023"}));
-        this.shadowRoot.appendChild(new SDAGanttButtomEditorPanel());
+        this.shadowRoot.appendChild(new SDAGanttStyle('animations.css'))
+        this.shadowRoot.appendChild(new SDAGanttStyle('colors.css'));
+        this.shadowRoot.appendChild(new SDAGanttStyle('styles.css'));
+        this.shadowRoot.appendChild(new SDAGanttStyle('main-sda-gantt-container.css'))
+
 
         this.socket.on("update", (data) => {
             let shouldAddEvent = true;
@@ -71,4 +73,4 @@ class SDAGanttContainer extends HTMLElement {
     }
 }
 
-customElements.define("sda-gantt-container", SDAGanttContainer);
+customElements.define("main-sda-gantt-container", MainSDAGanttContainer);

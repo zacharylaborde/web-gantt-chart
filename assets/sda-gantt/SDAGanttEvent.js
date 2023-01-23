@@ -1,17 +1,17 @@
 class SDAGanttEvent extends HTMLElement {
     constructor(name, activityCode, id, options={}) {
         super();
-        this.innerHTML = `
-        <div class="flag-holder"></div>
-        <p class="event-text"></p>`;
+        this.stylesheet = new SDAGanttStyle('sda-gantt-event.css');
+        this.innerHTML = `<div class="flag-holder"></div><p class="event-text"></p>`;
         this.name = name;
         this.activityCode = activityCode;
-        Object.keys(options).forEach((key) => this.dataset[key] = options[key])
-        this.tabIndex = 0;
         this.id = id;
+        Object.keys(options).forEach((key) => this[key] = options[key])
     }
 
     connectedCallback() {
+        this.getRootNode().appendChild(this.stylesheet);
+        this.tabIndex = 0;
         this.draggable = true;
         this.ondragstart = this._ondragstart;
         this.ondragend = this._ondragend;
@@ -22,36 +22,22 @@ class SDAGanttEvent extends HTMLElement {
     }
 
     set day(day) {
-        let remove = true;
-        this.parentRowCells((cell) => {
-            if (cell.dataset.day === day) {
-                cell.appendEvent(this);
-                remove = false;
-            }
-        });
-        if (remove) this.remove();
-    }
-
-    get parentRowName() {
-        return this.parentRow.title;
-    }
-
-    get parentRow() {
-        let parentRow;
-        this.getRootNode().querySelectorAll('tr[is=sda-gantt-row]').forEach((row) => {
-                row.querySelectorAll('sda-gantt-event').forEach((event) => {
-                    if (event.id === this.id) parentRow = row;
-                });
-            });
-        return parentRow;
-    }
-
-    get isSpikeUser() {
-        return spikeUsers.includes(this.parentRowName);
+        for (const cell of this.row.cells)
+            if (cell.day === day) cell.appendEvent(this);
     }
 
     get day() {
-        return this.parentNode.day;
+        return this.cell.day;
+    }
+
+    get cell() {
+        for (const cell of this.row.querySelectorAll('td[is=sda-gantt-cell]'))
+            if (cell.contains(this)) return cell;
+    }
+
+    get row() {
+        for (const row of this.getRootNode().querySelectorAll('tr[is=sda-gantt-row]'))
+            if (row.contains(this)) return row;
     }
 
     set name(name) {
@@ -64,7 +50,7 @@ class SDAGanttEvent extends HTMLElement {
 
     set activityCode(activityCode) {
         this.dataset.activityCode = activityCode;
-        this.className = `ellipsis-overflow gantt-event ${activityCodeColors[activityCode]} ${activityCodeColors[activityCode]}-border`;
+        this.className = `gantt-event ${activityCodeColors[activityCode]} ${activityCodeColors[activityCode]}-border`;
     }
 
     get activityCode() {
@@ -72,8 +58,9 @@ class SDAGanttEvent extends HTMLElement {
     }
 
     deleteEvent() {
-        let req = {event: this.id}
-        this.getRootNode().host.socket.emit('delete', req)
+        let req = {event: this.id};
+        this.getRootNode().host.socket.emit('delete', req);
+        this.classList.add("loading-event");
     }
 
     addFlag(type, description) {
@@ -84,26 +71,8 @@ class SDAGanttEvent extends HTMLElement {
         this.querySelectorAll("sda-gantt-flag").forEach((flag) => flag.remove());
     }
 
-    parentRowEvents(modify) {
-        this.parentRowCells((cell) => {
-            cell.events.forEach((event) => {
-                modify(event);
-            })
-        })
-    }
-
     updateTo(event) {
-        this.name = event.name;
-        this.activityCode = event.activityCode;
-        this.day = event.day;
-        if (event.options)
-            Object.keys(event.options).forEach((key) => this.dataset[key] = event.options[key])
-    }
-
-    parentRowCells(modify) {
-        this.parentNode.parentRowCells((cell) => {
-            modify(cell);
-        });
+        Object.keys(event).forEach((key) => this[key] = event[key]);
     }
 
     _ondragstart(event) {
@@ -114,10 +83,7 @@ class SDAGanttEvent extends HTMLElement {
     }
 
     _onkeydown(event) {
-        if (event.keyCode === 8 || event.keyCode === 46) {
-            this.classList.add("loading-event")
-            this.deleteEvent();
-        }
+        if (event.keyCode === 8 || event.keyCode === 46) this.deleteEvent();
     }
 
     _onclick(event) {

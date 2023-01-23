@@ -2,6 +2,11 @@ class SDAGanttEventList extends HTMLElement {
     constructor() {
         super();
         this.ondrop = this._ondrop;
+        this.stylesheet = new SDAGanttStyle('sda-gantt-event-list.css');
+    }
+
+    connectedCallback() {
+        this.getRootNode().appendChild(this.stylesheet);
     }
 
     addEvent({name, activityCode, id, options}) {

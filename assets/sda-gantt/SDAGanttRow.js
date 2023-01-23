@@ -6,9 +6,11 @@ class SDAGanttRow extends HTMLTableRowElement {
         this.title = title;
         this.ondragstart = this._ondragstart;
         this.ondragend = this._ondragend;
+        this.stylesheet = new SDAGanttStyle('sda-gantt-row.css');
     }
 
     connectedCallback() {
+        this.getRootNode().appendChild(this.stylesheet)
         this.appendNewCells(this.numDays)
     }
 

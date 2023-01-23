@@ -1,0 +1,6 @@
+.sda-gantt-row-selector {
+    height: 100%;
+    width: 100%;
+    border: none;
+    background-color: var(--primary-light);
+}

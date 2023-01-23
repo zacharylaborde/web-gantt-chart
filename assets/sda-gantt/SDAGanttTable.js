@@ -5,7 +5,7 @@ class SDAGanttTable extends HTMLTableElement {
         this.innerHTML = `
         <div class="table-message-box">&nbsp;</div>
         <thead class="gantt-header">
-            <tr id="gantt-time" class="gantt-time jet-black">
+            <tr>
                 <th class="jet-black gantt-time"></th>
             </tr>
         </thead>
@@ -13,10 +13,11 @@ class SDAGanttTable extends HTMLTableElement {
         this.startDay = new Date(startDay).toString();
         this.numDays = numDays;
         this.addDays(numDays);
-        this.className = 'gantt-table';
+        this.stylesheet = new SDAGanttStyle('sda-gantt-table.css');
     }
 
     async connectedCallback() {
+        this.getRootNode().appendChild(this.stylesheet);
         let sections = await this.gatherSections()
         sections.forEach((sectionTitle) =>{
             this.addSection(sectionTitle);
@@ -84,7 +85,7 @@ class SDAGanttTable extends HTMLTableElement {
             let cell = document.createElement("th");
             cell.className = "gantt-time jet-black";
             cell.innerText = this.createDay();
-            this.querySelector("#gantt-time").appendChild(cell);
+            this.querySelector("thead tr").appendChild(cell);
         }
     }
 
@@ -128,10 +129,10 @@ class SDAGanttTable extends HTMLTableElement {
     }
 
     createDay() {
-        if (this.querySelector("#gantt-time").children.length <= 1)
+        if (this.querySelector("thead tr").children.length <= 1)
             return new Date(this.startDay).toLocaleDateString("en-US", {month:"short", day:"numeric", year:"numeric"});
         else
-            return new Date(this.querySelector("#gantt-time").lastChild.textContent).addDays(1).toLocaleDateString("en-US", {month:"short", day:"numeric", year:"numeric"});
+            return new Date(this.querySelector("thead tr").lastChild.textContent).addDays(1).toLocaleDateString("en-US", {month:"short", day:"numeric", year:"numeric"});
     }
 
     get startDay() {

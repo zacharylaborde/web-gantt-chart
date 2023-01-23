@@ -1,3 +1,32 @@
+.conflict {
+    color: var(--error);
+    text-shadow: var(--error) 1px 0 4px;
+}
+
+.conflict-background {
+    background: var(--error);
+}
+
+.conflict:hover {
+    background-color: var(--error-light);
+}
+
+.warning {
+    color: var(--warn);
+    text-shadow: var(--warn) 1px 0 4px;
+}
+
+.warning:hover {
+    background-color: var(--warn-light);
+}
+
+.warning-background {
+    background: var(--warn);
+}
+
+
+
+/**/
 :root {
     --primary: #00308F;
     --primary-light: #00509F;
@@ -41,6 +70,9 @@
     --smoke-dark: #3D3D3D;
     --smoke: darkgrey;
     --smoke-light: lightgrey;
+
+    --editor-panel-color: #EBF1FF;
+    --editor-panel-button-hover: #DCE3F2;
 }
 
 .good {

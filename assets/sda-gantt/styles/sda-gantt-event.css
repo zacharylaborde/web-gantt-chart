@@ -1,0 +1,47 @@
+sda-gantt-event {
+    position: relative;
+    text-transform: uppercase;
+    padding: 2px;
+    min-height: 35px;
+    height: 100%;
+    text-align: center;
+    border-radius: 8px;
+    transition: 0.2s;
+    -webkit-user-select: none;    /* Safari */
+    -moz-user-select: none;       /* Firefox */
+    -ms-user-select: none;        /* IE10+/Edge */
+    user-select: none;            /* Standard */
+    z-index: 2;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    cursor: pointer;
+}
+
+.loading-event {
+    opacity: 0.2;
+    animation-name: loading-event;
+    animation-duration: 0.8s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    animation-direction: alternate;
+}
+
+.event-text {
+    left: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    direction: ltr;
+}
+
+.flag-holder {
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    top: -5px;
+    left: 10px;
+    max-width: 30%;
+    height: 100%;
+}
