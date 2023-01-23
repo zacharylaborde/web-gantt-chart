@@ -13,11 +13,10 @@ class SDAGanttTable extends HTMLTableElement {
         this.startDay = new Date(startDay).toString();
         this.numDays = numDays;
         this.addDays(numDays);
-        this.stylesheet = new SDAGanttStyle('sda-gantt-table.css');
     }
 
     async connectedCallback() {
-        this.getRootNode().appendChild(this.stylesheet);
+        this.stylesheet = this.getRootNode().host.addStylesheet('sda-gantt-table.css');
         let sections = await this.gatherSections()
         sections.forEach((sectionTitle) =>{
             this.addSection(sectionTitle);

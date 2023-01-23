@@ -1,10 +1,8 @@
 class SDAGanttCell extends HTMLTableCellElement {
     constructor(day) {
         super();
-        this.appendChild(new SDAGanttEventList())
         this.setAttribute('is', 'sda-gantt-cell');
         this.day = day;
-        this.className = 'gantt-position';
         this.ondragover = this._ondragover;
         this.ondragenter = this._ondragenter;
         this.ondragleave = this._ondragleave;
@@ -14,6 +12,8 @@ class SDAGanttCell extends HTMLTableCellElement {
     }
 
     connectedCallback() {
+        this.stylesheet = this.getRootNode().host.addStylesheet("sda-gantt-cell.css");
+        this.appendChild(new SDAGanttEventList());
         this.fetchEvents()
     }
 

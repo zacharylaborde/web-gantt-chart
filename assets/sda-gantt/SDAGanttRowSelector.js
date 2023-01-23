@@ -3,10 +3,10 @@ class SDAGanttRowSelector extends HTMLElement {
         super();
         this.innerHTML = `<select class="sda-gantt-row-selector" id="selection"></select>`
         this.type = type;
-        this.stylesheet = new SDAGanttStyle('sda-gantt-row-selector.css');
     }
 
     connectedCallback() {
+        this.stylesheet = this.getRootNode().host.addStylesheet('sda-gantt-row-selector.css');
         this.getRootNode().appendChild(this.stylesheet);
         fetch(`sda-event-categories/${this.type}`)
             .then((response) => response.json())

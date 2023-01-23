@@ -10,15 +10,13 @@ class MainSDAGanttContainer extends HTMLElement {
     }
 
     connectedCallback() {
+        this.addStylesheet('main-sda-gantt-container.css')
         this.shadowRoot.querySelector('.gantt-table-controller')
             .appendChild(new SDAGanttTableController());
-        this.shadowRoot.appendChild(new SDAGanttStyle("form-fields.css"));
-        this.shadowRoot.appendChild(new SDAGanttStyle("gantt-events.css"));
-        this.shadowRoot.appendChild(new SDAGanttStyle("gantt-heads.css"));
+        this.shadowRoot.appendChild(new SDAGanttStyle("form-fields.css")); // to delete later.
         this.shadowRoot.appendChild(new SDAGanttStyle('animations.css'))
         this.shadowRoot.appendChild(new SDAGanttStyle('colors.css'));
         this.shadowRoot.appendChild(new SDAGanttStyle('styles.css'));
-        this.shadowRoot.appendChild(new SDAGanttStyle('main-sda-gantt-container.css'))
 
 
         this.socket.on("update", (data) => {
@@ -70,6 +68,15 @@ class MainSDAGanttContainer extends HTMLElement {
                 })
             })
         })
+    }
+
+    addStylesheet(stylesheetName) {
+        for(const stylesheet of this.shadowRoot.querySelectorAll('link[is=sda-gantt-style]'))
+            if (stylesheet.href.includes(stylesheetName)) return stylesheet;
+
+        const newStylesheet = new SDAGanttStyle(stylesheetName)
+        this.shadowRoot.appendChild(newStylesheet);
+        return newStylesheet
     }
 }
 

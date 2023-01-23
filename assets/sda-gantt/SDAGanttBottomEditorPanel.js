@@ -1,7 +1,6 @@
 class SDAGanttBottomEditorPanel extends HTMLElement {
     constructor() {
         super();
-        this.stylesheet = new SDAGanttStyle('sda-gantt-bottom-editor-panel.css');
         this.innerHTML = `<button class="editor-panel-close-button">EDITOR PANEL ${"\u2630"}</button>`
         this.button = this.querySelector('.editor-panel-close-button');
         this.button.onclick = (event) => {
@@ -12,7 +11,7 @@ class SDAGanttBottomEditorPanel extends HTMLElement {
     }
 
     connectedCallback() {
-        this.getRootNode().appendChild(this.stylesheet)
+        this.stylesheet = this.getRootNode().host.addStylesheet('sda-gantt-bottom-editor-panel.css');
     }
 
 

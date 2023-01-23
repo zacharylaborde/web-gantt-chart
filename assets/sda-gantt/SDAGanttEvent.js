@@ -1,7 +1,6 @@
 class SDAGanttEvent extends HTMLElement {
     constructor(name, activityCode, id, options={}) {
         super();
-        this.stylesheet = new SDAGanttStyle('sda-gantt-event.css');
         this.innerHTML = `<div class="flag-holder"></div><p class="event-text"></p>`;
         this.name = name;
         this.activityCode = activityCode;
@@ -10,7 +9,7 @@ class SDAGanttEvent extends HTMLElement {
     }
 
     connectedCallback() {
-        this.getRootNode().appendChild(this.stylesheet);
+        this.stylesheet = this.getRootNode().host.addStylesheet('sda-gantt-event.css');
         this.tabIndex = 0;
         this.draggable = true;
         this.ondragstart = this._ondragstart;

@@ -1,4 +1,4 @@
-.gantt-position {
+td[is=sda-gantt-cell] {
     position: relative;
     border: solid 1px #ADC9FF;
     border-top: solid 1px black;

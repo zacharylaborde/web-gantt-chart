@@ -16,3 +16,12 @@ sda-gantt-event-list::-moz-viewport-scroll {
 sda-gantt-event-list::-webkit-scrollbar {
     width: 5px;
 }
+
+sda-gantt-event-list::-webkit-scrollbar-track {
+    background: #EBF1FF;
+}
+
+sda-gantt-event-list::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border: 1px solid #EBF1FF;
+}

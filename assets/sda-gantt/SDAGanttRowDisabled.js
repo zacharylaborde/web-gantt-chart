@@ -2,11 +2,11 @@ class SDAGanttRowDisabled extends HTMLTableRowElement {
     constructor() {
         super();
         this.setAttribute("is", "sda-gantt-row-disabled");
-        this.stylesheet = new SDAGanttStyle('sda-gantt-row-disabled.css');
         this.innerHTML = `<td class="disabled-gantt-head primary-light"><div class="row-delete"></div></td>`;
     }
 
     connectedCallback() {
+        this.stylesheet = this.getRootNode().host.addStylesheet('sda-gantt-row-disabled.css');
         this.getRootNode().appendChild(this.stylesheet);
         this.querySelector("td").appendChild(new SDAGanttRowSelector(this.type));
         let rowDelete = this.querySelector(".row-delete");

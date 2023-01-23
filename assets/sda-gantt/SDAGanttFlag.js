@@ -2,7 +2,6 @@ class SDAGanttFlag extends HTMLElement {
     constructor(type, description) {
         super();
         let flagString = "\u2691";
-        this.stylesheet = new SDAGanttStyle("sda-gantt-flag.css")
         this.innerHTML = `<div class="gantt-flag ${type}">${"\u2691"}</div>`;
         this.querySelector('.gantt-flag').onmouseenter = this._onmouseenter;
         this.querySelector('.gantt-flag').onmouseleave = this._onmouseleave;
@@ -10,7 +9,7 @@ class SDAGanttFlag extends HTMLElement {
     }
 
     connectedCallback() {
-        this.getRootNode().appendChild(this.stylesheet);
+        this.stylesheet = this.getRootNode().host.addStylesheet('sda-gantt-flag.css');
     }
 
     constructMessage(type, description) {

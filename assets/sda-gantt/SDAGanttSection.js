@@ -2,7 +2,6 @@ class SDAGanttSection extends HTMLTableSectionElement {
     constructor(title) {
         super();
         this.setAttribute('is', 'sda-gantt-section');
-        this.stylesheet = new SDAGanttStyle('sda-gantt-section.css');
         this.innerHTML = `
         <tr>
             <td class="gantt-titles primary">
@@ -16,6 +15,7 @@ class SDAGanttSection extends HTMLTableSectionElement {
     }
 
     connectedCallback() {
+        this.stylesheet = this.getRootNode().host.addStylesheet('sda-gantt-section.css');
         this.getRootNode().appendChild(this.stylesheet);
         this.querySelector(".gantt-titles").colSpan = this.numDays + 1
         this.querySelector(".gantt-titles").onclick = () => {
