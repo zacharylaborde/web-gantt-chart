@@ -75,7 +75,12 @@ class SDAGanttEvent extends HTMLElement {
     }
 
     generateForms() {
-        return [new SDAHPAConsumptionPanel()];
+        return [
+            new SDAGeneralMaintenanceEventPanel(),
+            new SDAGeneralEventPanel(),
+            new SDAHPAConsumptionPanel(),
+            new SDARawWaterConsumptionPanel(),
+        ];
     }
 
     _ondragstart(event) {
@@ -92,10 +97,8 @@ class SDAGanttEvent extends HTMLElement {
     _onclick(event) {
         if (!this.getRootNode().querySelector('sda-gantt-bottom-editor-panel').isExpanded())
             this.getRootNode().querySelector('.editor-panel-close-button').click();
-        for (const form of this.generateForms()) {
-            this.getRootNode().querySelector('sda-gantt-bottom-editor-panel')
-                .addForm(form);
-        }
+        this.getRootNode().querySelector('sda-gantt-bottom-editor-panel')
+                .addForms(this.generateForms());
 
     }
 }

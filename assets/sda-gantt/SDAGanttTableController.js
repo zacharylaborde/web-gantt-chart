@@ -2,8 +2,8 @@ class SDAGanttTableController extends HTMLElement {
     constructor() {
         super();
         this.innerHTML = `
-        <div class="table-message-box"></div>
-        <div class="form-panel"></div>`;
+        <div class="form-panel"></div>
+        <div class="table-message-box"></div>`;
         this.dateRangePicker = new SDAGanttDateRangePicker();
     }
 

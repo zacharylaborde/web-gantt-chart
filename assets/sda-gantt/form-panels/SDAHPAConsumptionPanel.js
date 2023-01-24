@@ -2,6 +2,7 @@ class SDAHPAConsumptionPanel extends HTMLElement {
     constructor() {
         super();
         this.innerHTML = `
+        <h3 style="grid-column: span 2">High Pressure Air Consumption</h3>
         <label for="spikeUser">Spike User</label><input name="spikeUser">
         <label for="startHour">Start Hour</label><input name="startHour">
         <label for="durationInMinutes">Duration In Minutes</label><input name="durationInMinutes">

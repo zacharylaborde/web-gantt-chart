@@ -29,12 +29,14 @@ class SDAGanttBottomEditorPanel extends HTMLElement {
     }
 
     clearForms() {
-        this.querySelector('.editor-panel-form-content').childNodes.forEach((child) => child.remove())
+        while (this.querySelector('.editor-panel-form-content').hasChildNodes())
+            this.querySelector('.editor-panel-form-content').firstChild.remove();
     }
 
-    addForm(form) {
+    addForms(forms) {
         this.clearForms();
-        this.querySelector('.editor-panel-form-content').appendChild(form);
+        for (const form of forms)
+            this.querySelector('.editor-panel-form-content').appendChild(form);
     }
 }
 
