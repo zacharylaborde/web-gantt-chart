@@ -1,15 +1,18 @@
 class SDAGanttTableController extends HTMLElement {
     constructor() {
         super();
-        this.innerHTML = `<button>SDA Gantt Table Controller</button>`
+        this.innerHTML = `
+        <div class="table-message-box"></div>
+        <div class="form-panel"></div>`;
+        this.dateRangePicker = new SDAGanttDateRangePicker();
     }
 
     connectedCallback() {
         this.stylesheet = this.getRootNode().host.addStylesheet('sda-gantt-table-controller.css');
-        this.appendChild(new SDADateRangePicker());
+        this.querySelector('.form-panel').appendChild(this.dateRangePicker);
         this.getRootNode().querySelector('.gantt-table-container')
-            .appendChild(new SDAGanttTable({numDays: 17, startDay: "10JAN2023"}));
-        this.getRootNode().appendChild(new SDAGanttBottomEditorPanel());
+            .appendChild(new SDAGanttTable({numDays: 17, startDay: this.dateRangePicker.valueAsDate.addDays(-2).toLocaleDateString()}));
+        this.getRootNode().querySelector('.gantt-content').appendChild(new SDAGanttBottomEditorPanel());
     }
 }
 

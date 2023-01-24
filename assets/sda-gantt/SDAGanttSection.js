@@ -52,6 +52,10 @@ class SDAGanttSection extends HTMLTableSectionElement {
         return newRow;
     }
 
+    update(){
+        this.querySelector(".gantt-titles").colSpan = this.numDays + 1
+    }
+
     set title(title) {
         this.querySelector(`#title`).innerText = title;
     }
@@ -65,7 +69,7 @@ class SDAGanttSection extends HTMLTableSectionElement {
     }
 
     get numDays() {
-        return this.parentNode.numDays;
+        return this.getRootNode().querySelector('table[is=sda-gantt-table]').numDays;
     }
 
     get rows() {

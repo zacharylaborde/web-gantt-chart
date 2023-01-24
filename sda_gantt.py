@@ -74,11 +74,13 @@ class SDAGantt(html.Div):
             # The following is a simulated server request.
             if str(id).upper() == "TEST UNITS":
                 res = {"TEST UNITS": [
-                    "16T", "APTU", "TUNNEL A", "TUNNEL B", "TUNNEL C", "TUNNEL D"
+                    "16T", "APTU", "TUNNEL A", "TUNNEL B", "TUNNEL C", "TUNNEL D", "SL2", "SL3",
+                    "J5", "J6", "C1", "C2", "J4", "J1", "J2", "H1", "H2", "H3"
                 ]}
                 return flask.jsonify(res)
             if str(id).upper() == "MAINTENANCE":
                 res = {"MAINTENANCE": [
+                    "GENERAL",
                     "RAW WATER SYSTEM",
                     "HIGH PRESSURE AIR SYSTEM (PRODUCTION SIDE)",
                     "HIGH PRESSURE AIR SYSTEM (CONSUMPTION SIDE)",

@@ -3,7 +3,6 @@ class SDAGanttTable extends HTMLTableElement {
         super();
         this.setAttribute('is', 'sda-gantt-table');
         this.innerHTML = `
-        <div class="table-message-box">&nbsp;</div>
         <thead class="gantt-header">
             <tr>
                 <th class="jet-black gantt-time"></th>
@@ -12,7 +11,13 @@ class SDAGanttTable extends HTMLTableElement {
         `;
         this.startDay = new Date(startDay).toString();
         this.numDays = numDays;
-        this.addDays(numDays);
+        for (let i = 0; i < numDays; i++) {
+            let cell = document.createElement("th");
+            cell.className = "gantt-time jet-black";
+            cell.innerText = this.createDay();
+            if (new Date().dayEquals(cell.innerText)) cell.style.color = 'var(--support-light)';
+            this.querySelector("thead tr").appendChild(cell);
+        }
     }
 
     async connectedCallback() {
@@ -21,22 +26,8 @@ class SDAGanttTable extends HTMLTableElement {
         sections.forEach((sectionTitle) =>{
             this.addSection(sectionTitle);
         });
-        let events = await this.gatherEvents();
-        events.forEach((event) => {
-            this.addEvent(event);
-        });
-        let conflicts = await this.gatherConflicts();
-        conflicts.forEach((conflict) => {
-            this.querySelectorAll(`sda-gantt-event`).forEach((event) => {
-                if (event.id === conflict.event_id.toString()) event.addFlag("conflict", conflict.description)
-            })
-        });
-        let warnings = await this.gatherWarnings();
-        warnings.forEach((warning) => {
-            this.querySelectorAll(`sda-gantt-event`).forEach((event) => {
-                if (event.id === warning.event_id.toString()) event.addFlag("warning", warning.description)
-            })
-        })
+        await this.gatherEventsConflictsAndWarnings(this.startDay, this.numDays)
+        this.getRootNode().querySelector('.gantt-table-container').onscroll = this._onscroll;
     }
 
     async gatherConflicts() {
@@ -67,25 +58,58 @@ class SDAGanttTable extends HTMLTableElement {
             .then((data) => {return data.sections});
     }
 
-    async gatherEvents() {
+    async gatherEvents(schedule, start, numDays) {
         return fetch("/sda-gantt/get-events", {
             method: 'UPDATE',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({scheduleString: "2023W1S1", startDay: this.startDay, numDays: this.numDays})
+            body: JSON.stringify({schedule: schedule, startDay: start, numDays: numDays})
         })
             .then((response) => response.json())
             .then((data) => {return data.events;});
     }
 
-    addDays(numDays) {
+    async addDays(numDays) {
         for (let i = 0; i < numDays; i++) {
             let cell = document.createElement("th");
             cell.className = "gantt-time jet-black";
             cell.innerText = this.createDay();
+            console.log(this.createDay());
+            if (new Date(this.createDay()).getWeek() === new Date().getWeek()) cell.classList.add('today-head');
             this.querySelector("thead tr").appendChild(cell);
+            for (const row of this.querySelectorAll('tr[is=sda-gantt-row]'))
+                row.appendNewCells(1);
         }
+        this.numDays += parseInt(numDays);
+        for (const section of this.querySelectorAll('tbody[is=sda-gantt-section]'))
+            section.update();
+        await this.gatherEventsConflictsAndWarnings(new Date(this.startDay).addDays(parseInt(numDays)).toString(), numDays);
+    }
+
+    async gatherEventsConflictsAndWarnings(startDay, numDays) {
+        let events = await this.gatherEvents("current", startDay, numDays);
+        events.forEach((event) => this.addEvent(event));
+        let conflicts = await this.gatherConflicts();
+        let warnings = await this.gatherWarnings();
+        for (const event of this.querySelectorAll(`sda-gantt-event`))
+            event.clearFlags();
+        conflicts.forEach((conflict) => {
+            this.querySelectorAll(`sda-gantt-event`).forEach((event) => {
+                if (event.id === conflict.event_id.toString()) {
+                    event.addFlag("conflict", conflict.description)
+                }
+            })
+        });
+        warnings.forEach((warning) => {
+            this.querySelectorAll(`sda-gantt-event`).forEach((event) => {
+                if (event.id === warning.event_id.toString()) event.addFlag("warning", warning.description)
+            })
+        })
+    }
+
+    addConflict(conflict) {
+
     }
 
     addSection(title) {
@@ -110,6 +134,12 @@ class SDAGanttTable extends HTMLTableElement {
     }
 
     addEvent(event) {
+        let shouldAddEvent = true;
+        this.querySelectorAll(`sda-gantt-event`)
+            .forEach((e) =>  {
+                if (e.id === event.id.toString()) shouldAddEvent = false;
+        });
+        if (!shouldAddEvent) return;
         let shouldCreateNewRow = true;
         let rows = this.querySelectorAll("tr[is=sda-gantt-row]");
         if (rows.length !== 0)
@@ -134,20 +164,17 @@ class SDAGanttTable extends HTMLTableElement {
             return new Date(this.querySelector("thead tr").lastChild.textContent).addDays(1).toLocaleDateString("en-US", {month:"short", day:"numeric", year:"numeric"});
     }
 
+    async _onscroll(event) {
+        if (this.scrollLeft / (this.scrollWidth - this.offsetWidth) > 0.98)
+            await this.getRootNode().querySelector('table[is=sda-gantt-table]').addDays(14);
+    }
+
     get startDay() {
         return this.dataset.startDay;
     }
 
     set startDay(startDay) {
         this.dataset.startDay = startDay
-    }
-
-    get numDays() {
-        return this.dataset.numDays;
-    }
-
-    set numDays(numDays) {
-        this.dataset.numDays = numDays;
     }
 }
 

@@ -4,14 +4,13 @@ class MainSDAGanttContainer extends HTMLElement {
         this.attachShadow({mode: "open"});
         this.socket = io.connect();
         this.shadowRoot.innerHTML = `
-        <div class="gantt-table-container">
-            <div class="gantt-table-controller"></div>
-        </div>`;
+        <div class="table-controller"></div>
+        <div class="gantt-content"><div class="gantt-table-container"></div></div>`;
     }
 
     connectedCallback() {
         this.addStylesheet('main-sda-gantt-container.css')
-        this.shadowRoot.querySelector('.gantt-table-controller')
+        this.shadowRoot.querySelector('.table-controller')
             .appendChild(new SDAGanttTableController());
         this.shadowRoot.appendChild(new SDAGanttStyle("form-fields.css")); // to delete later.
         this.shadowRoot.appendChild(new SDAGanttStyle('animations.css'))

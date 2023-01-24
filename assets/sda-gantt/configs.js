@@ -18,4 +18,14 @@ Date.prototype.addDays = function(days) {
     return date;
 }
 
+Date.prototype.getWeek = function() {
+    currentDate = this;
+    startDate = new Date(currentDate.getFullYear(), 0, 1);
+    return Math.ceil(Math.floor((currentDate - startDate) / (24 * 60 * 60 * 1000)) / 7);
+}
+
+Date.prototype.dayEquals = function(date) {
+    return this.toLocaleDateString() === new Date(date).toLocaleDateString();
+}
+
 

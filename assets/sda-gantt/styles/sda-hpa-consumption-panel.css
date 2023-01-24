@@ -1,0 +1,10 @@
+sda-hpa-consumption-panel {
+    flex: 1;
+    display: grid;
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+    padding: 30px;
+    gap: 10px;
+    grid-template-columns: 1fr 1fr;
+}

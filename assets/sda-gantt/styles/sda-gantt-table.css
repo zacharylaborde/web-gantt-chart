@@ -7,18 +7,6 @@ table[is=sda-gantt-table] {
     margin: 0;
 }
 
-.gantt-table {
-
-}
-
-.table-message-box {
-    position: fixed;
-    top: 15px;
-    width: 200px;
-    left: 0;
-    z-index: 99;
-}
-
 .gantt-header {
     position: sticky;
     top: 0;

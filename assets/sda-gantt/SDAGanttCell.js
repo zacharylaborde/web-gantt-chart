@@ -15,6 +15,17 @@ class SDAGanttCell extends HTMLTableCellElement {
         this.stylesheet = this.getRootNode().host.addStylesheet("sda-gantt-cell.css");
         this.appendChild(new SDAGanttEventList());
         this.fetchEvents()
+
+        if (this.isThisWeek) this.className = 'this-week';
+        if (this.isToday) this.className = 'today';
+    }
+
+    get isToday() {
+        return new Date(this.day).toLocaleDateString() === new Date().toLocaleDateString();
+    }
+
+    get isThisWeek() {
+        return new Date(this.day).getWeek() === new Date().getWeek();
     }
 
     fetchEvents() {

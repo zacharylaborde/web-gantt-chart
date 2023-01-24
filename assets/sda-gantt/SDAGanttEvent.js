@@ -74,6 +74,10 @@ class SDAGanttEvent extends HTMLElement {
         Object.keys(event).forEach((key) => this[key] = event[key]);
     }
 
+    generateForms() {
+        return [new SDAHPAConsumptionPanel()];
+    }
+
     _ondragstart(event) {
         this.style.opacity = '0.4';
         event.dataTransfer.setData("text", this.id);
@@ -86,7 +90,13 @@ class SDAGanttEvent extends HTMLElement {
     }
 
     _onclick(event) {
-        event.stopPropagation();
+        if (!this.getRootNode().querySelector('sda-gantt-bottom-editor-panel').isExpanded())
+            this.getRootNode().querySelector('.editor-panel-close-button').click();
+        for (const form of this.generateForms()) {
+            this.getRootNode().querySelector('sda-gantt-bottom-editor-panel')
+                .addForm(form);
+        }
+
     }
 }
 

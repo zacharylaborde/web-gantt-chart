@@ -1,5 +1,6 @@
 sda-gantt-bottom-editor-panel {
-    position: sticky;
+    display: flex;
+    flex-direction: column;
     height: 50px;
     left: 0;
     bottom: 0;
@@ -40,4 +41,15 @@ sda-gantt-bottom-editor-panel {
     width: min(100%, 100vw);
     padding: 0;
     overflow-y: auto;
+}
+
+.expanded-horizontal > .editor-panel-form-content {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    align-items: stretch;
+}
+
+.editor-panel-form-content {
+    display: none;
 }
