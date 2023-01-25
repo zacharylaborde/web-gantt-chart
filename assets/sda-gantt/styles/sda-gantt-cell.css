@@ -36,6 +36,7 @@ td[is=sda-gantt-cell] {
     margin: 2px;
     z-index: 2;
     opacity: 20%;
+    animation: bounce-down 0.4s ease;
 }
 
 .add-event-filter:hover {

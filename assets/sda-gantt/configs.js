@@ -28,4 +28,6 @@ Date.prototype.dayEquals = function(date) {
     return this.toLocaleDateString() === new Date(date).toLocaleDateString();
 }
 
-
+Date.prototype.asHTMLWeek = function() {
+    return `${this.getFullYear()}-W${this.getWeek().toString().padStart(2, '0')}`;
+}

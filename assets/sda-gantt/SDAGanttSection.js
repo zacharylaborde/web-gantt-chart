@@ -99,15 +99,16 @@ class SDAGanttSection extends HTMLTableSectionElement {
     addMirage() {
         if (this.containsEmptyRow) return;
         this.removeMirage();
-        let mirage = document.createElement("tr");
-        this.appendChild(mirage);
-        let mirageContent = document.createElement("td");
+        let mirage = document.createElement("div");
+        this.querySelector('.gantt-titles-text').appendChild(mirage);
+        let mirageContent = document.createElement("div");
         mirage.appendChild(mirageContent);
         mirageContent.className = "new-row-mirage";
         mirageContent.colSpan = parseInt(this.numDays) + 1;
-        mirageContent.textContent = "+ Add Row";
+        mirageContent.textContent = "+";
         mirage.id = "mirage";
-        mirage.onclick = () => {
+        mirage.onclick = (event) => {
+            event.stopPropagation();
             this.removeMirage();
             this.addEmptyRow()
         }

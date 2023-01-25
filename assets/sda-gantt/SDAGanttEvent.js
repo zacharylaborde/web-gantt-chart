@@ -91,7 +91,10 @@ class SDAGanttEvent extends HTMLElement {
     }
 
     _onkeydown(event) {
-        if (event.keyCode === 8 || event.keyCode === 46) this.deleteEvent();
+        if (event.keyCode !== undefined)
+            if (event.keyCode === 8 || event.keyCode === 46) this.deleteEvent();
+        else
+            if (event.key === 8 || event.key === 46) this.deleteEvent();
     }
 
     _onclick(event) {

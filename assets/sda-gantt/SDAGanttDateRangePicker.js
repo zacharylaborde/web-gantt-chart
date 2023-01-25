@@ -5,8 +5,15 @@ class SDAGanttDateRangePicker extends HTMLInputElement {
         this.type = 'week';
         this.onchange = this._onchange;
         const currentDay = new Date();
-        this.value = `${currentDay.getFullYear()}-W${currentDay.getWeek().toString().padStart(2, '0')}`;
+        this.value = currentDay.asHTMLWeek();
         this.required = true;
+        this.min = currentDay.asHTMLWeek();
+        this.addEventListener('keydown', function(event) {
+        if (event.keyCode !== undefined)
+            if (event.keyCode === 38 || event.keyCode === 40) event.preventDefault();
+        else
+            if (event.keyCode === 38 || event.keyCode === 40) event.preventDefault();
+        })
     }
 
     connectedCallback() {
