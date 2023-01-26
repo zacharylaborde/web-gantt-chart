@@ -17,22 +17,10 @@ class SDAGanttEventList extends HTMLElement {
         ));
     }
 
-    moveEvent(event) {
-        event.classList.add("loading-event");
-        let req = {event: event.id, property: "day", to: this.day};
-        this.getRootNode().host.socket.emit('update', req);
-    }
-
-    createEvent(event) {
-        let req = {
-            name: event.name,
-            activityCode: event.activityCode,
-            day: this.day,
-            parentRowName: this.parentRowName,
-            type: this.type,
-            options: event.options,
-        }
-        this.getRootNode().host.socket.emit('create', req)
+    get type() {
+        for (const section of this.getRootNode().querySelectorAll('tbody[is=sda-gantt-section]'))
+            for (const eventList of section.querySelectorAll('sda-gantt-event-list'))
+                if (eventList === this) return section.title;
     }
 
     appendEvent(event) {
@@ -59,20 +47,22 @@ class SDAGanttEventList extends HTMLElement {
         return this.parentNode.parentRowName;
     }
 
-    get type() {
-        return this.parentNode.type;
-    }
-
     _ondrop(event) {
         event.preventDefault();
         const eventId = event.dataTransfer.getData("text");
         let ganttEvent = this.getRootNode().getElementById(eventId);
-        if (event.dataTransfer.effectAllowed === "copy") this.createEvent({
+        if (event.dataTransfer.effectAllowed === "copy")
+            this.getRootNode().host.updateManager.createEvent({
             name: ganttEvent.name,
             activityCode: ganttEvent.activityCode,
-            options: ganttEvent.options
+            options: ganttEvent.options,
+            day: this.day,
+            parentRowName: this.parentRowName,
         });
-        else this.moveEvent(ganttEvent);
+        else {
+            ganttEvent.classList.add('loading-event');
+            this.getRootNode().host.updateManager.updateEvent(ganttEvent, "day", this.day);
+        }
     }
 }
 

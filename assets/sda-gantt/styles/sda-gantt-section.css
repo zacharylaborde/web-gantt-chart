@@ -11,13 +11,6 @@
     cursor: pointer;
 }
 
-.gantt-titles:hover .gantt-titles-text::before {
-    content: "[=]";
-    left: -50px;
-    color: var(--smoke-light);
-    position: absolute;
-}
-
 .gantt-titles-text {
     position: sticky;
     left: 50%;

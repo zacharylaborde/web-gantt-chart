@@ -1,12 +1,12 @@
 sda-general-event-panel {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     text-align: center;
     align-content: start;
     color: white;
-    padding: 30px;
+    padding: 30px 50px;
     gap: 10px;
     flex: 0.25;
-    grid-template-columns: 1fr 1fr;
     background-color: var(--deep-dark);
     border-radius: 20px;
     overflow-y: auto;

@@ -10,6 +10,7 @@ class SDAGanttEvent extends HTMLElement {
 
     connectedCallback() {
         this.stylesheet = this.getRootNode().host.addStylesheet('sda-gantt-event.css');
+        this.activityCode = this.activityCode;
         this.tabIndex = 0;
         this.draggable = true;
         this.ondragstart = this._ondragstart;
@@ -49,17 +50,29 @@ class SDAGanttEvent extends HTMLElement {
 
     set activityCode(activityCode) {
         this.dataset.activityCode = activityCode;
-        this.className = `gantt-event ${activityCodeColors[activityCode]} ${activityCodeColors[activityCode]}-border`;
+        if (this.isConnected)
+            this.className = `gantt-event ${this.getRootNode().host.activityCodeColors[this.type][activityCode]} ${this.getRootNode().host.activityCodeColors[this.type][activityCode]}-border`;
     }
 
     get activityCode() {
         return this.dataset.activityCode;
     }
 
+    get type() {
+        for (const section of this.getRootNode().querySelectorAll('tbody[is=sda-gantt-section]'))
+            for (const event of section.querySelectorAll('sda-gantt-event'))
+                if (event === this) return section.title;
+    }
+
+    set type(type) {
+
+    }
+
     deleteEvent() {
-        let req = {event: this.id};
-        this.getRootNode().host.socket.emit('delete', req);
+        if (this.getRootNode().querySelector('sda-gantt-bottom-editor-panel').isExpanded())
+            this.getRootNode().querySelector('.editor-panel-close-button').click();
         this.classList.add("loading-event");
+        this.getRootNode().host.updateManager.deleteEvent(this.id);
     }
 
     addFlag(type, description) {
@@ -75,12 +88,7 @@ class SDAGanttEvent extends HTMLElement {
     }
 
     generateForms() {
-        return [
-            new SDAGeneralMaintenanceEventPanel(),
-            new SDAGeneralEventPanel(),
-            new SDAHPAConsumptionPanel(),
-            new SDARawWaterConsumptionPanel(),
-        ];
+        return [new SDAGeneralEventPanel(this)];
     }
 
     _ondragstart(event) {

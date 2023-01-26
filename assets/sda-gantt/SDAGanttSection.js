@@ -65,7 +65,7 @@ class SDAGanttSection extends HTMLTableSectionElement {
     }
 
     get title() {
-        return this.querySelector(`#title`).innerText;
+        return this.querySelector(`#title`).innerText.split('\n')[0];
     }
 
     get numDays() {

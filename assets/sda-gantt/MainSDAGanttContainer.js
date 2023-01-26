@@ -2,23 +2,23 @@ class MainSDAGanttContainer extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({mode: "open"});
-        this.socket = io.connect();
+        this.updateManager = new UpdateManager();
         this.shadowRoot.innerHTML = `
         <div class="table-controller"></div>
         <div class="gantt-content"><div class="gantt-table-container"></div></div>`;
     }
 
-    connectedCallback() {
-        this.addStylesheet('main-sda-gantt-container.css')
+    async connectedCallback() {
+        this.addStylesheet('main-sda-gantt-container.css');
+        this.activityCodeColors = await getActivityCodeColors();
         this.shadowRoot.querySelector('.table-controller')
             .appendChild(new SDAGanttTableController());
-        this.shadowRoot.appendChild(new SDAGanttStyle("form-fields.css")); // to delete later.
         this.shadowRoot.appendChild(new SDAGanttStyle('animations.css'))
         this.shadowRoot.appendChild(new SDAGanttStyle('colors.css'));
         this.shadowRoot.appendChild(new SDAGanttStyle('styles.css'));
 
 
-        this.socket.on("update", (data) => {
+        this.updateManager.socket.on("update", (data) => {
             let shouldAddEvent = true;
             this.shadowRoot.querySelectorAll("sda-gantt-event").forEach((currentEvent) => {
                 if (data.id.toString() === currentEvent.id.toString()) {
@@ -27,10 +27,10 @@ class MainSDAGanttContainer extends HTMLElement {
                 }
             });
             if (shouldAddEvent) this.shadowRoot.querySelector('table[is=sda-gantt-table]').addEvent(data);
-            this.refreshConflictsAndWarnings();
+            this.shadowRoot.querySelector('table[is=sda-gantt-table]').refreshAllConflictsAndWarnings();
         });
 
-        this.socket.on("delete", (data) => {
+        this.updateManager.socket.on("delete", (data) => {
             this.shadowRoot.querySelectorAll("sda-gantt-event").forEach((currentEvent) => {
                 if (data.event.toString() === currentEvent.id.toString()) currentEvent.remove();
             });
@@ -42,14 +42,14 @@ class MainSDAGanttContainer extends HTMLElement {
                 if (section.querySelectorAll("tr[is=sda-gantt-row]").length === 0)
                     section.removeMirage();
             });
-            this.refreshConflictsAndWarnings();
+            this.shadowRoot.querySelector('table[is=sda-gantt-table]').refreshAllConflictsAndWarnings();
         });
     }
 
     refreshConflictsAndWarnings() {
         this.shadowRoot.querySelectorAll('sda-gantt-flag')
             .forEach((flag) => flag.remove());
-        this.shadowRoot.querySelector('table[is=sda-gantt-table]').gatherConflicts()
+        this.updateManager.gatherConflicts()
             .then((conflicts) => {
                 conflicts.forEach((conflict) => {
                     this.shadowRoot.querySelectorAll(`sda-gantt-event`).forEach((event) => {
@@ -58,9 +58,9 @@ class MainSDAGanttContainer extends HTMLElement {
                 })
             })
         })
-        this.shadowRoot.querySelector('table[is=sda-gantt-table]').gatherWarnings()
-            .then((conflicts) => {
-                conflicts.forEach((warning) => {
+        this.updateManager.gatherWarnings()
+            .then((warnings) => {
+                warnings.forEach((warning) => {
                     this.shadowRoot.querySelectorAll(`sda-gantt-event`).forEach((event) => {
                         if (event.id === warning.event_id.toString())
                             event.addFlag("warning", warning.description)

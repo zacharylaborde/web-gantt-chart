@@ -31,24 +31,12 @@ class SDAGanttCell extends HTMLTableCellElement {
     fetchEvents() {
     }
 
-    createEvent(event) {
-        this.querySelector("sda-gantt-event-list").createEvent(event);
-    }
-
     appendEvent(event) {
         this.querySelector("sda-gantt-event-list").appendEvent(event);
     }
 
     addEvent(event) {
         this.querySelector("sda-gantt-event-list").addEvent(event);
-    }
-
-    removeEvent(event) {
-        this.querySelector("sda-gantt-event-list").del(event);
-    }
-
-    moveEvent(event) {
-        this.querySelector("sda-gantt-event-list").moveEvent(event);
     }
 
     parentRowCells(modify) {
@@ -70,7 +58,9 @@ class SDAGanttCell extends HTMLTableCellElement {
     }
 
     get type() {
-        return this.parentNode.type;
+        for (const section of this.getRootNode().querySelector('tbody[is=sda-gantt-sectin]'))
+            for (const event of section.querySelector('sda-gantt-event'))
+                if (event.id === this.id) return section.title;
     }
 
     get parentRow() {
@@ -96,14 +86,21 @@ class SDAGanttCell extends HTMLTableCellElement {
         this.classList.remove("over");
     }
 
-    _onmouseenter(event) {
+    _onmouseenter() {
         let addEventDiv = document.createElement("div");
         addEventDiv.classList.add("add-event-filter");
         addEventDiv.id = "add-event-filter";
         addEventDiv.innerText = "+";
         if (this.querySelectorAll("sda-gantt-event").length === 0) addEventDiv.style.opacity = "1";
         addEventDiv.onclick = () => {
-            this.createEvent({name: "", activityCode: "TEST", options: {}});
+            const event = {
+                name: "",
+                activityCode: "NONE",
+                day: this.day,
+                parentRowName: this.parentRowName,
+                options: {},
+            }
+            this.getRootNode().host.updateManager.createEvent(event);
         }
         this.appendChild(addEventDiv);
     }

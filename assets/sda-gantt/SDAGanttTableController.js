@@ -4,7 +4,7 @@ class SDAGanttTableController extends HTMLElement {
         this.innerHTML = `
         <div class="form-panel"></div>
         <div class="table-message-box"></div>`;
-        this.dateRangePicker = new SDAGanttDateRangePicker();
+        this.dateRangePicker = new SDADateRangePicker();
     }
 
     connectedCallback() {

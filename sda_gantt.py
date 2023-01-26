@@ -98,7 +98,7 @@ class SDAGantt(html.Div):
                 return flask.jsonify(res)
             return flask.jsonify("error")
 
-        @app.server.route("/sda-gantt/get-sections")
+        @app.server.route("/sda-gantt/get-event-types")
         def event_sections():
             # The following is a simulated server request.
             sda_gantt_sections = {"sections": ["TEST UNITS", "UTILITY", "MAINTENANCE"]}
@@ -124,3 +124,71 @@ class SDAGantt(html.Div):
             with open("conflicts.json", "r") as jsonFile:
                 res = json.load(jsonFile)
             return flask.jsonify(res)
+
+        @app.server.route('/sda-gantt/get-all-projects')
+        def get_all_projects():
+            return flask.jsonify({
+                "projects": [
+                    {
+                        "id": 1,
+                        "name": "ALPHA"
+                    },
+                    {
+                        "id": 2,
+                        "name": "BRAVO"
+                    },
+                    {
+                        "id": 3,
+                        "name": "CHARLIE"
+                    },
+                    {
+                        "id": 4,
+                        "name": "DELTA"
+                    },
+                    {
+                        "id": 5,
+                        "name": "ECHO"
+                    },
+                    {
+                        "id": 6,
+                        "name": "FOXTROT"
+                    },
+                    {
+                        "id": 7,
+                        "name": "GOLF"
+                    },
+                    {
+                        "id": 8,
+                        "name": "HOTEL"
+                    },
+                    {
+                        "id": 9,
+                        "name": "INDIA"
+                    },
+                ]
+            })
+
+        @app.server.route('/sda-gantt/get-activity-code-colors')
+        def get_activity_code_colors():
+            return flask.jsonify({
+                "TEST UNITS": {
+                    "CONFLICT": "error",
+                    "TEST": "deep",
+                    "CHECKOUT": "violet",
+                    "INSTRUMENTATION CHECKOUT": "violet",
+                    "REMOVAL": "maroon",
+                    "NONE": "smoke",
+                    # "1": "good",
+                    # "2": "warn",
+                    # "3": "mint",
+                },
+                "UTILITY": {
+                    "SUPPORT": "support",
+                    "NONE": "smoke",
+                },
+                "MAINTENANCE": {
+                    "MAINTENANCE": "tan",
+                    "NONE": "smoke",
+                },
+                "NONE": "smoke",
+            })
